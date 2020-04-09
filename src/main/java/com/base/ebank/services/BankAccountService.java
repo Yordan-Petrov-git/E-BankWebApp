@@ -2,6 +2,7 @@ package com.base.ebank.services;
 
 import com.base.ebank.bindingModels.BankAccountBindingModel;
 import com.base.ebank.entities.BankAccount;
+import com.base.ebank.entities.Transaction;
 import com.base.ebank.entities.User;
 import com.base.ebank.repositories.BankAccountRepository;
 import com.base.ebank.repositories.TransactionRepository;
@@ -47,8 +48,44 @@ public class BankAccountService {
         account.setBalance(BigDecimal.ZERO);
         this.bankAccountRepository.saveAndFlush(account);
         return true;
-
     }
+
+    public BankAccountBindingModel extractAccountForTransaction(Long id) {
+        BankAccount bankAccount = this.bankAccountRepository.findById(id).orElse(null);
+
+        if (bankAccount == null) {
+            throw new IllegalArgumentException("Invalid Bank account !");
+        }
+
+        BankAccountBindingModel bankAccountBindingModel = new BankAccountBindingModel();
+        bankAccountBindingModel.setId(id);
+        bankAccountBindingModel.setUsername(bankAccount.getOwner().getUsername());
+        bankAccountBindingModel.setIban(bankAccount.getIban());
+        return bankAccountBindingModel;
+    }
+
+    public boolean depositAmount(BankAccountBindingModel bankAccountBindingModel) {
+        BankAccount bankAccount = this.bankAccountRepository.findById(bankAccountBindingModel.getId()).orElse(null);
+
+        if (bankAccount == null) {
+            return false;
+        } else if (bankAccountBindingModel.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            return false;
+        }
+        bankAccount.setBalance(bankAccount.getBalance().add(bankAccountBindingModel.getAmount()));
+
+        Transaction transaction = new Transaction();
+        transaction.setType("DEPOSIT");
+        transaction.setFromAccount(bankAccount);
+        transaction.setToAccount(bankAccount);
+        transaction.setAmount(bankAccountBindingModel.getAmount());
+        this.transactionRepository.save(transaction);
+        this.bankAccountRepository.save(bankAccount);
+        return true;
+        
+    }
+
+
 }
 
 
