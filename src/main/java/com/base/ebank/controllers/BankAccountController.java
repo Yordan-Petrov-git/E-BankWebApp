@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -36,6 +33,28 @@ public class BankAccountController {
     public String createBankAccountConfirm(Model model, @ModelAttribute("bankAccountBindingModel")BankAccountBindingModel bankAccountBindingModel){
     if(!this.bankAccountService.createAccount(bankAccountBindingModel)){
         model.addAttribute("view","accounts/create-account");
+        model.addAttribute("bankAccountBindingModel",bankAccountBindingModel);
+        return "fragments/layout";
+    }
+
+        return "redirect:/home";
+    }
+
+    @GetMapping("/deposit/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String deposit(Model model, @PathVariable("id") Long id){
+        BankAccountBindingModel bankAccountBindingModel =this.bankAccountService.extractAccountForTransaction(id);
+        model.addAttribute("view","account/deposit");
+        model.addAttribute("bankAccountBindingModel",bankAccountBindingModel);
+        return "fragments/layout";
+    }
+
+    @PostMapping("/deposit/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String depositConfirm(Model model, @PathVariable("id") Long id,@ModelAttribute("bankAccountBindingModel")BankAccountBindingModel bankAccountBindingModel){
+
+    if(!this.bankAccountService.depositAmount(bankAccountBindingModel)){
+        model.addAttribute("view","account/deposit");
         model.addAttribute("bankAccountBindingModel",bankAccountBindingModel);
         return "fragments/layout";
     }
