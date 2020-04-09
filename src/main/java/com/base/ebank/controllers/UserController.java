@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-   // @PreAuthorize("isAnonymous()")
+    @PreAuthorize("isAnonymous()")
     public String registerConfirm(Model model, @ModelAttribute("userBindingModel") UserBindingModel userBindingModel){
 
     if (!this.userService.registerUser(userBindingModel)){
