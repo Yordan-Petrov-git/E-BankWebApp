@@ -1,10 +1,10 @@
 .bg-color-dark {
-    background-color: #3d23bf;
+    background-color: #005cbf;
     color: #A9A9A9;
 }
 
 .footer {
-    background-color: #3d23bf;
+    background-color: #005cbf;
     color: rgb(255, 255, 255);
 }
 
@@ -22,7 +22,7 @@ body, html {
 
 .bg {
     /* The image used */
-    background-image: url("https://www.civista.bank/assets/img/olb-background.png");
+    background-image: url("https://teiss.co.uk/wp-content/uploads/2018/04/online-banking-systems-vulnerabilities.jpg");
 
     /* Full height */
     height: 100%;

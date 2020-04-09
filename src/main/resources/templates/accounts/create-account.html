@@ -3,7 +3,7 @@
         <h1>Create Account</h1>
         <hr />
         <div class="d-flex justify-content-center align-items-center container ">
-            <form class="col-md-4" z:action="@{/accounts/create}" th:method="post" th:object="${bankAccountBindingModel}">
+            <form class="col-md-4" th:action="@{/accounts/create}" th:method="post" th:object="${bankAccountBindingModel}">
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" class="form-control" id="username" placeholder="Enter username" th:field="*{username}" readonly>
