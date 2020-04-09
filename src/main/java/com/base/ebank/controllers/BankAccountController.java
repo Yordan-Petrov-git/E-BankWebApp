@@ -31,7 +31,7 @@ public class BankAccountController {
         }
 
     @PostMapping("/create")
-   // @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     public String createBankAccountConfirm(Model model
             , @ModelAttribute("bankAccountBindingModel")BankAccountBindingModel bankAccountBindingModel){
     if(!this.bankAccountService.createAccount(bankAccountBindingModel)){

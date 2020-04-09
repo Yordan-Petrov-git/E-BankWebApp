@@ -1,15 +1,15 @@
 .bg-color-dark {
-    background-color: #005cbf;
+    background-color: #3359bf;
     color: #A9A9A9;
 }
 
 .footer {
-    background-color: #005cbf;
+    background-color: #3359bf;
     color: rgb(255, 255, 255);
 }
 
 .nav-item>a:hover, .navbar-brand:hover {
-    color: #FFFFFF;
+    color: #3548ff;
 }
 
 iframe {
@@ -22,7 +22,7 @@ body, html {
 
 .bg {
     /* The image used */
-    background-image: url("https://teiss.co.uk/wp-content/uploads/2018/04/online-banking-systems-vulnerabilities.jpg");
+    background-image: url("http://www.aljanh.net/data/archive/img/1770726821.jpeg");
 
     /* Full height */
     height: 100%;
