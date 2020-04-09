@@ -13,14 +13,18 @@ import java.util.stream.Collectors;
 @Service
 public class TransactionService {
     private final TransactionRepository transactionRepository;
-@Autowired
+
+    @Autowired
     public TransactionService(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
     }
-    public Set<Transaction> getAllByName (String name){
-      return    this.transactionRepository.findAll().stream().filter(t ->t.getToAccount().getOwner().getUsername().equals(name) ||
-                 t.getFromAccount().getOwner().getUsername().equals(name))
-              .sorted(Comparator.comparing(Transaction::getType))
-                 .collect(Collectors.toCollection(LinkedHashSet::new));
+
+    public Set<Transaction> getAllByName(String name) {
+        return this.transactionRepository.findAll()
+                .stream()
+                .filter(t -> t.getToAccount().getOwner().getUsername().equals(name) ||
+                        t.getFromAccount().getOwner().getUsername().equals(name))
+                .sorted(Comparator.comparing(Transaction::getType))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 }

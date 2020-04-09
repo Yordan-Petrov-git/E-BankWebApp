@@ -45,23 +45,23 @@ public class UserController {
 
     @PostMapping("/register")
     @PreAuthorize("isAnonymous()")
-    public String registerConfirm(Model model, @ModelAttribute("userBindingModel") UserBindingModel userBindingModel){
+    public String registerConfirm(Model model, @ModelAttribute("userBindingModel") UserBindingModel userBindingModel) {
 
-    if (!this.userService.registerUser(userBindingModel)){
-        model.addAttribute("view", "users/register-user");
-        model.addAttribute("userBindingModel", userBindingModel);
-        return "fragments/layout";
-    }
-      return  "redirect:/login";
+        if (!this.userService.registerUser(userBindingModel)) {
+            model.addAttribute("view", "users/register-user");
+            model.addAttribute("userBindingModel", userBindingModel);
+            return "fragments/layout";
+        }
+        return "redirect:/login";
     }
 
     @GetMapping("/transactions")
     @PreAuthorize("isAnonymous()")
-    public String allTransactions(Principal principal,Model model){
+    public String allTransactions(Principal principal, Model model) {
 
-        model.addAttribute("username",principal.getName());
-        model.addAttribute("transactions",this.transactionService.getAllByName(principal.getName()));
-        model.addAttribute("view","users/transactions");
+        model.addAttribute("username", principal.getName());
+        model.addAttribute("transactions", this.transactionService.getAllByName(principal.getName()));
+        model.addAttribute("view", "users/transactions");
         return "fragments/layout";
     }
 }
