@@ -65,11 +65,13 @@ public class BankAccountService {
     }
 
     public boolean depositAmount(BankAccountBindingModel bankAccountBindingModel) {
-        BankAccount bankAccount = this.bankAccountRepository.findById(bankAccountBindingModel.getId()).orElse(null);
+        BankAccount bankAccount = this.bankAccountRepository
+                .findById(bankAccountBindingModel.getId()).orElse(null);
 
         if (bankAccount == null) {
             return false;
-        } else if (bankAccountBindingModel.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+          //  bankAccountBindingModel.getAmount().compareTo(BigDecimal.ZERO) >  0
+        } else if (BigDecimal.ZERO.compareTo(bankAccountBindingModel.getAmount()) > 0) {
             return false;
         }
         bankAccount.setBalance(bankAccount.getBalance().add(bankAccountBindingModel.getAmount()));
@@ -82,7 +84,7 @@ public class BankAccountService {
         this.transactionRepository.save(transaction);
         this.bankAccountRepository.save(bankAccount);
         return true;
-        
+
     }
 
 

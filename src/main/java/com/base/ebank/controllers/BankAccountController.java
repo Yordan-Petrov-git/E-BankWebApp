@@ -21,7 +21,9 @@ public class BankAccountController {
 
         @GetMapping("/create")
         @PreAuthorize("isAuthenticated()")
-        public String createBankAccount(Model model, @ModelAttribute("bankAccountBindingModel")BankAccountBindingModel bankAccountBindingModel, Principal principal){
+        public String createBankAccount(Model model
+                , @ModelAttribute("bankAccountBindingModel")BankAccountBindingModel bankAccountBindingModel
+                , Principal principal){
     bankAccountBindingModel.setUsername(principal.getName());
     model.addAttribute("view","accounts/create-account");
     model.addAttribute("bankAccountBindingModel",bankAccountBindingModel);
@@ -29,8 +31,9 @@ public class BankAccountController {
         }
 
     @PostMapping("/create")
-    @PreAuthorize("isAuthenticated()")
-    public String createBankAccountConfirm(Model model, @ModelAttribute("bankAccountBindingModel")BankAccountBindingModel bankAccountBindingModel){
+   // @PreAuthorize("isAuthenticated()")
+    public String createBankAccountConfirm(Model model
+            , @ModelAttribute("bankAccountBindingModel")BankAccountBindingModel bankAccountBindingModel){
     if(!this.bankAccountService.createAccount(bankAccountBindingModel)){
         model.addAttribute("view","accounts/create-account");
         model.addAttribute("bankAccountBindingModel",bankAccountBindingModel);
@@ -42,19 +45,24 @@ public class BankAccountController {
 
     @GetMapping("/deposit/{id}")
     @PreAuthorize("isAuthenticated()")
-    public String deposit(Model model, @PathVariable("id") Long id){
-        BankAccountBindingModel bankAccountBindingModel =this.bankAccountService.extractAccountForTransaction(id);
-        model.addAttribute("view","account/deposit");
+    public String deposit(Model model,
+                          @PathVariable("id") Long id){
+        BankAccountBindingModel bankAccountBindingModel =
+                this.bankAccountService.extractAccountForTransaction(id);
+
+        model.addAttribute("view","accounts/deposit");
         model.addAttribute("bankAccountBindingModel",bankAccountBindingModel);
         return "fragments/layout";
     }
 
     @PostMapping("/deposit/{id}")
     @PreAuthorize("isAuthenticated()")
-    public String depositConfirm(Model model, @PathVariable("id") Long id,@ModelAttribute("bankAccountBindingModel")BankAccountBindingModel bankAccountBindingModel){
+    public String depositConfirm(Model model,
+                                 @PathVariable("id") Long id
+            ,@ModelAttribute("bankAccountBindingModel")BankAccountBindingModel bankAccountBindingModel){
 
     if(!this.bankAccountService.depositAmount(bankAccountBindingModel)){
-        model.addAttribute("view","account/deposit");
+        model.addAttribute("view","accounts/deposit");
         model.addAttribute("bankAccountBindingModel",bankAccountBindingModel);
         return "fragments/layout";
     }

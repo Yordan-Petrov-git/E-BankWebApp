@@ -4,20 +4,21 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table (name = "transactions")
+@Table(name = "transactions")
 public class Transaction {
-private Long id;
-private String type;
+    private Long id;
+    private String type;
     private BankAccount fromAccount;
     private BankAccount toAccount;
     private BigDecimal amount;
 
-    public Transaction(){
+    public Transaction() {
 
     }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id",nullable = false,unique = true,updatable = false)
+    @Column(name = "id", nullable = false, unique = true, updatable = false)
     public Long getId() {
         return this.id;
     }
@@ -36,7 +37,7 @@ private String type;
     }
 
     @ManyToOne(targetEntity = BankAccount.class)
-    @JoinColumn(name = "sender",updatable = false)
+    @JoinColumn(name = "sender", updatable = false)
     public BankAccount getFromAccount() {
         return this.fromAccount;
     }
@@ -46,7 +47,7 @@ private String type;
     }
 
     @ManyToOne(targetEntity = BankAccount.class)
-    @JoinColumn(name = "reciver",updatable = false)
+    @JoinColumn(name = "reciver", updatable = false)
     public BankAccount getToAccount() {
         return this.toAccount;
     }
@@ -54,7 +55,8 @@ private String type;
     public void setToAccount(BankAccount toAccount) {
         this.toAccount = toAccount;
     }
-   @Column(name = "amount",nullable = false,updatable = false)
+
+    @Column(name = "amount", nullable = false, updatable = false)
     public BigDecimal getAmount() {
         return this.amount;
     }
@@ -62,7 +64,6 @@ private String type;
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
-
 
 
 }
