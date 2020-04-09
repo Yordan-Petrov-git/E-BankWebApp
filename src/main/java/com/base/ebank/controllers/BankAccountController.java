@@ -72,29 +72,26 @@ public class BankAccountController {
 
 
 
-
-
-
-    @GetMapping("/withdraw /{id}")
+    @GetMapping("/withdraw/{id}")
     @PreAuthorize("isAuthenticated()")
     public String withdraw (Model model,
                           @PathVariable("id") Long id){
         BankAccountBindingModel bankAccountBindingModel =
                 this.bankAccountService.extractAccountForTransaction(id);
 
-        model.addAttribute("view","accounts/withdraw ");
+        model.addAttribute("view","accounts/withdraw");
         model.addAttribute("bankAccountBindingModel",bankAccountBindingModel);
         return "fragments/layout";
     }
 
-    @PostMapping("/withdraw /{id}")
+    @PostMapping("/withdraw/{id}")
     @PreAuthorize("isAuthenticated()")
     public String withdrawConfirm(Model model,
                                  @PathVariable("id") Long id
             ,@ModelAttribute("bankAccountBindingModel")BankAccountBindingModel bankAccountBindingModel){
 
         if(!this.bankAccountService.withdrawAmount(bankAccountBindingModel)){
-            model.addAttribute("view","accounts/withdraw    ");
+            model.addAttribute("view","accounts/withdraw");
             model.addAttribute("bankAccountBindingModel",bankAccountBindingModel);
             return "fragments/layout";
         }
@@ -103,7 +100,33 @@ public class BankAccountController {
     }
 
 
+    @GetMapping("/transfer/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String transfer (Model model,
+                            @PathVariable("id") Long id){
+        BankAccountBindingModel bankAccountBindingModel =
+                this.bankAccountService.extractAccountForTransaction(id);
 
 
+        model.addAttribute("bankAccountBindingModel",bankAccountBindingModel);
+        model.addAttribute("bankAccounts",this.bankAccountService.getAllById(id));
+        model.addAttribute("view","accounts/transfer");
+        return "fragments/layout";
+    }
+
+    @PostMapping("/transfer/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String transferConfirm (Model model,
+                            @PathVariable("id") Long id ,
+                                   @ModelAttribute("bankAccountBindingModel")BankAccountBindingModel bankAccountBindingModel){
+       if(!this.bankAccountService.transferAmount(bankAccountBindingModel)){
+           model.addAttribute("bankAccountBindingModel",bankAccountBindingModel);
+           model.addAttribute("bankAccounts",this.bankAccountService.getAllById(id));
+           model.addAttribute("view","accounts/transfer");
+           return "fragments/layout";
+       }
+
+        return "redirect:/home";
+    }
 
 }

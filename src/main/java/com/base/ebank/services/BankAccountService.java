@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.security.Principal;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -94,11 +95,11 @@ public class BankAccountService {
 
         if (bankAccount == null) {
             return false;
-
-        } else if (BigDecimal.ZERO.compareTo(bankAccountBindingModel.getAmount()) > 0) {
+        } else if (bankAccountBindingModel.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
             return false;
-        }else if (bankAccount.getBalance().compareTo(bankAccountBindingModel.getAmount()) < 0  ){
-
+        } else if (bankAccount.getBalance().compareTo(bankAccountBindingModel.getAmount()) < 0) {
+            //remove to get negative amount
+            return false;
         }
         bankAccount.setBalance(bankAccount.getBalance().subtract(bankAccountBindingModel.getAmount()));
 
@@ -113,6 +114,50 @@ public class BankAccountService {
 
     }
 
+
+    public boolean transferAmount(BankAccountBindingModel model) {
+        BankAccount fromAccount = this.bankAccountRepository
+                .findById(model.getId()).orElse(null);
+
+
+        BankAccount toAccount = this.bankAccountRepository
+                .findById(model.getReceiverId()).orElse(null);
+
+
+        if (fromAccount == null || toAccount == null) {
+            return false;
+        } else if (model.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            return false;
+        }
+        if (fromAccount.getBalance().compareTo(model.getAmount()) < 0) {
+            return false;
+        }
+
+
+        BigDecimal newBalance = toAccount.getBalance().add(model.getAmount());
+
+        toAccount.setBalance(newBalance);
+
+        fromAccount.setBalance(fromAccount.getBalance().subtract(model.getAmount()));
+
+
+        Transaction transaction = new Transaction();
+
+        transaction.setFromAccount(fromAccount);
+        transaction.setToAccount(toAccount);
+
+        transaction.setAmount(model.getAmount());
+
+        transaction.setType("TRANSFER");
+
+        this.transactionRepository.save(transaction);
+        this.bankAccountRepository.save(fromAccount);
+        this.bankAccountRepository.save(toAccount);
+        return true;
+    }
+    public List<BankAccount> getAllById(Long id){
+        return this.bankAccountRepository.findAllByIdIsNot(id);
+    }
 }
 
 
