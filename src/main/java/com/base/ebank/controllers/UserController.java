@@ -56,7 +56,7 @@ public class UserController {
     }
 
     @GetMapping("/transactions")
-    @PreAuthorize("isAnonymous()")
+    //@PreAuthorize("isAnonymous()")
     public String allTransactions(Principal principal, Model model) {
 
         model.addAttribute("username", principal.getName());
