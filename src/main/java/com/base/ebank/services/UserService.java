@@ -61,5 +61,10 @@ public class UserService implements UserDetailsService {
         this.userRepository.saveAndFlush(user);
         return true;
     }
+
+    public User findOneByUsername(String username ){
+       return this.userRepository.findByUsername(username);
+    }
+
 }
 
