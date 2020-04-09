@@ -69,4 +69,41 @@ public class BankAccountController {
 
         return "redirect:/home";
     }
+
+
+
+
+
+
+    @GetMapping("/withdraw /{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String withdraw (Model model,
+                          @PathVariable("id") Long id){
+        BankAccountBindingModel bankAccountBindingModel =
+                this.bankAccountService.extractAccountForTransaction(id);
+
+        model.addAttribute("view","accounts/withdraw ");
+        model.addAttribute("bankAccountBindingModel",bankAccountBindingModel);
+        return "fragments/layout";
+    }
+
+    @PostMapping("/withdraw /{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String withdrawConfirm(Model model,
+                                 @PathVariable("id") Long id
+            ,@ModelAttribute("bankAccountBindingModel")BankAccountBindingModel bankAccountBindingModel){
+
+        if(!this.bankAccountService.withdrawAmount(bankAccountBindingModel)){
+            model.addAttribute("view","accounts/withdraw    ");
+            model.addAttribute("bankAccountBindingModel",bankAccountBindingModel);
+            return "fragments/layout";
+        }
+
+        return "redirect:/home";
+    }
+
+
+
+
+
 }

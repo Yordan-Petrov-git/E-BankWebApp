@@ -70,7 +70,7 @@ public class BankAccountService {
 
         if (bankAccount == null) {
             return false;
-          //  bankAccountBindingModel.getAmount().compareTo(BigDecimal.ZERO) >  0
+
         } else if (BigDecimal.ZERO.compareTo(bankAccountBindingModel.getAmount()) > 0) {
             return false;
         }
@@ -87,6 +87,31 @@ public class BankAccountService {
 
     }
 
+
+    public boolean withdrawAmount(BankAccountBindingModel bankAccountBindingModel) {
+        BankAccount bankAccount = this.bankAccountRepository
+                .findById(bankAccountBindingModel.getId()).orElse(null);
+
+        if (bankAccount == null) {
+            return false;
+
+        } else if (BigDecimal.ZERO.compareTo(bankAccountBindingModel.getAmount()) > 0) {
+            return false;
+        }else if (bankAccount.getBalance().compareTo(bankAccountBindingModel.getAmount()) < 0  ){
+
+        }
+        bankAccount.setBalance(bankAccount.getBalance().subtract(bankAccountBindingModel.getAmount()));
+
+        Transaction transaction = new Transaction();
+        transaction.setType("WITHDRAW");
+        transaction.setFromAccount(bankAccount);
+        transaction.setToAccount(bankAccount);
+        transaction.setAmount(bankAccountBindingModel.getAmount());
+        this.transactionRepository.save(transaction);
+        this.bankAccountRepository.save(bankAccount);
+        return true;
+
+    }
 
 }
 
